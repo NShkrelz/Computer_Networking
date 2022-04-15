@@ -6,6 +6,7 @@ import time
 import select
 import statistics
 import binascii
+
 # Should use stdev
 
 ICMP_ECHO_REQUEST = 8
@@ -53,14 +54,11 @@ def receiveOnePing(mySocket, ID, timeout, destAddr):
         icmpType, code, packetID, checksum, sequence = struct.unpack("bbHHh", icmpHeader)
 
         # Fill in end
-        if packetID == ID and icmpType == 0:
-            timeSent = struct.pack("d", time.time())
-            return timeRecieved - timeSent
-            
         timeLeft = timeLeft - howLongInSelect
         if timeLeft <= 0 or icmpType != 0 or packetID != ID:
             return "Request timed out."
-
+        else:
+            return howLongInSelect * 1000
 
 
 def sendOnePing(mySocket, destAddr, ID):
@@ -82,19 +80,17 @@ def sendOnePing(mySocket, destAddr, ID):
     else:
         myChecksum = htons(myChecksum)
 
-
     header = struct.pack("bbHHh", ICMP_ECHO_REQUEST, 0, myChecksum, ID, 1)
     packet = header + data
 
     mySocket.sendto(packet, (destAddr, 1))  # AF_INET address must be tuple, not str
 
-
     # Both LISTS and TUPLES consist of a number of objects
     # which can be referenced by their position number within the object.
 
+
 def doOnePing(destAddr, timeout):
     icmp = getprotobyname("icmp")
-
 
     # SOCK_RAW is a powerful socket type. For more details:   http://sockraw.org/papers/sock_raw
     mySocket = socket(AF_INET, SOCK_RAW, icmp)
@@ -116,7 +112,7 @@ def ping(host, timeout=1):
     varValues = []
     vars = []
     # Send ping requests to a server separated by approximately one second
-    for i in range(0,4):
+    for i in range(0, 4):
         delay = doOnePing(dest, timeout)
         varValues.append(delay)
         print(delay)
@@ -124,19 +120,20 @@ def ping(host, timeout=1):
 
     packet_min = min(varValues)
     vars.append(packet_min)
-    print("min = ", round(packet_min,2))
-    packet_avg = sum(varValues)/len(varValues)
+    print("min = ", round(packet_min, 2))
+    packet_avg = sum(varValues) / len(varValues)
     vars.append(packet_avg)
     print("avg = ", float(round(packet_avg, 2)))
     packet_max = max(varValues)
     vars.append(packet_max)
-    print("max = ", round(packet_max,2))
+    print("max = ", round(packet_max, 2))
     stdev_var = statistics.stdev(varValues)
     vars.append(stdev_var)
-    print("stddev = ", float(stdev_var,2))
-    #vars = [str(round(packet_min, 8)), str(round(packet_avg, 8)), str(round(packet_max, 8)),str(round(stdev(stdev_var), 8))]
+    print("stddev = ", float(stdev_var))
+    # vars = [str(round(packet_min, 8)), str(round(packet_avg, 8)), str(round(packet_max, 8)),str(round(stdev(stdev_var), 8))]
     print("round-trip min/avg/max/stddev = ", vars[0], "/", vars[1], "/", vars[2], "/", vars[3], " ms")
     return vars
+
 
 if __name__ == '__main__':
     ping("google.co.il")
