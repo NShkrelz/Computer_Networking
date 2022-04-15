@@ -123,14 +123,18 @@ def ping(host, timeout=1):
 
     packet_min = min(varValues)
     vars.append(packet_min)
+    print("min = ", round(packet_min, 2))
     packet_avg = sum(varValues)/len(varValues)
     vars.append(packet_avg)
+    print("avg = ", float(round(packet_avg, 2)))
     packet_max = max(varValues)
     vars.append(packet_max)
+    print("max = ", round(packet_max, 2))
     stdev_var = statistics.stdev(varValues)
     vars.append(stdev_var)
-    #vars = [str(round(packet_min, 2)), str(round(packet_avg, 2)), str(round(packet_max, 2)), str(stdev_var)]
-    print("round-trip min/avg/max/stddev = ", packet_min, "/", packet_avg, 2, "/", packet_max, "/", stdev_var, " ms")
+    print("stddev = ", float(stdev_var))
+    # vars = [str(round(packet_min, 2)), str(round(packet_avg, 2)), str(round(packet_max, 2)), str(stdev_var)]
+    # print("round-trip min/avg/max/stddev = ", packet_min, "/", packet_avg, 2, "/", packet_max, "/", stdev_var, " ms")
     return vars
 
 if __name__ == '__main__':
