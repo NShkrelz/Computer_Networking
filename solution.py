@@ -58,7 +58,7 @@ def receiveOnePing(mySocket, ID, timeout, destAddr):
         if timeLeft <= 0 or icmpType != 0 or packetID != ID:
             return "Request timed out."
         else:
-            return howLongInSelect*1000
+            return howLongInSelect *1000
 
 
 def sendOnePing(mySocket, destAddr, ID):
