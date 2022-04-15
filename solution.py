@@ -131,7 +131,7 @@ def ping(host, timeout=1):
     stdev_var = statistics.stdev(varValues)
     #vars.append(stdev_var)
     #print("stddev = ", float(stdev_var))
-    vars = [str(round(packet_min, 2)), str(round(packet_avg, 2)), str(round(packet_max, 2)), str(stdev_var)]
+    vars = [str(round(packet_min, 8)), str(round(packet_avg, 8)), str(round(packet_max, 8)),str(round(stdev(stdev_var), 8))]
     print("round-trip min/avg/max/stddev = ", vars[0], "/", vars[1], "/", vars[2], "/", vars[3], " ms")
     return vars
 
