@@ -34,7 +34,6 @@ def checksum(string):
     return answer
 
 
-
 def receiveOnePing(mySocket, ID, timeout, destAddr):
     timeLeft = timeout
 
@@ -51,15 +50,14 @@ def receiveOnePing(mySocket, ID, timeout, destAddr):
         # Fill in start
         # Fetch the ICMP header from the IP packet
         icmpHeader = recPacket[20:28]
-        type, code, packetID, checksum, sequence = struct.unpack("bbHHh", icmpHeader)
+        icmpType, code, packetID, checksum, sequence = struct.unpack("bbHHh", icmpHeader)
 
         # Fill in end
         timeLeft = timeLeft - howLongInSelect
-        if timeLeft <= 0 or type != 0 or packetID != 0:
+        if timeLeft <= 0 or packetID != ID or type != 0:
             return "Request timed out."
         else:
             return howLongInSelect * 1000
-
 
 
 def sendOnePing(mySocket, destAddr, ID):
@@ -123,18 +121,18 @@ def ping(host, timeout=1):
 
     packet_min = min(varValues)
     vars.append(packet_min)
-    print("min = ", round(packet_min, 2))
+    #print("min = ", round(packet_min, 2))
     packet_avg = sum(varValues)/len(varValues)
     vars.append(packet_avg)
-    print("avg = ", float(round(packet_avg, 2)))
+    #print("avg = ", float(round(packet_avg, 2)))
     packet_max = max(varValues)
     vars.append(packet_max)
-    print("max = ", round(packet_max, 2))
+    #print("max = ", round(packet_max, 2))
     stdev_var = statistics.stdev(varValues)
     vars.append(stdev_var)
-    print("stddev = ", float(stdev_var))
+    #print("stddev = ", float(stdev_var))
     # vars = [str(round(packet_min, 2)), str(round(packet_avg, 2)), str(round(packet_max, 2)), str(stdev_var)]
-    # print("round-trip min/avg/max/stddev = ", packet_min, "/", packet_avg, 2, "/", packet_max, "/", stdev_var, " ms")
+    print("round-trip min/avg/max/stddev = ", vars[0], "/", vars[1], "/", vars[2], "/", vars[3], " ms")
     return vars
 
 if __name__ == '__main__':
