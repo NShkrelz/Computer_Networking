@@ -53,12 +53,14 @@ def receiveOnePing(mySocket, ID, timeout, destAddr):
         icmpType, code, packetID, checksum, sequence = struct.unpack("bbHHh", icmpHeader)
 
         # Fill in end
-        
+        if packetID == ID and icmpType == 0:
+            timeSent = struct.pack("d", time.time())
+            return timeRecieved - timeSent
+            
         timeLeft = timeLeft - howLongInSelect
         if timeLeft <= 0 or icmpType != 0 or packetID != ID:
             return "Request timed out."
-        else:
-            return howLongInSelect *1000
+
 
 
 def sendOnePing(mySocket, destAddr, ID):
