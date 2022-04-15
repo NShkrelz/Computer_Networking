@@ -50,15 +50,16 @@ def receiveOnePing(mySocket, ID, timeout, destAddr):
 
         # Fill in start
         # Fetch the ICMP header from the IP packet
-        icmpHeader = recPacket[20:28]
-        icmpType, code, packetID, checksum, sequence = struct.unpack("bbHHh", icmpHeader)
+        icmp = recPacket [20:28]
+        icmpType, code, checksum, packetID, sequence = struct.unpack("bbHHh", icmp)
+       
+        if packetID == ID and icmpType == 0:
+            return (timeReceived - startedSelect) * 1000
 
         # Fill in end
         timeLeft = timeLeft - howLongInSelect
-        if timeLeft <= 0 or icmpType != 0 or packetID != ID:
+        if timeLeft <= 0:
             return "Request timed out."
-        else:
-            return howLongInSelect * 1000
 
 
 def sendOnePing(mySocket, destAddr, ID):
@@ -117,11 +118,7 @@ def ping(host, timeout=1):
         print(delay)
         varValues.append(delay)
         time.sleep(1)  # one second
-    # packet_min
-    # packet_avg
-    # packet_max
-    # stdev_var
-    # print(delayRTT)
+
     packet_min = min(varValues)
     print("min = ", round(packet_min, 2))
     vars.append(packet_min)
