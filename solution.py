@@ -125,10 +125,10 @@ def ping(host, timeout=1):
     packet_min = min(varValues)
     packet_max = max(varValues)
     packet_avg = sum(varValues)/len(varValues)
-    stdev_var = statistics.stdev(varValues)
-    
+    stdev_var = round(statistics.stdev(varValues), 2)
+
     vars = [str(round(packet_min, 2)), str(round(packet_avg, 2)), str(round(packet_max, 2)),
-            str(round(stdev_var), 2)]
+            str(stdev_var)]
     print("round-trip min/avg/max/stdev = ", vars, "ms")
     return vars
 
