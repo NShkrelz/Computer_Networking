@@ -113,6 +113,7 @@ def ping(host, timeout=1):
     print("")
     # Calculate vars values and return them
     varValues = []
+    vars = []
     # Send ping requests to a server separated by approximately one second
     for i in range(0,4):
         delay = doOnePing(dest, timeout)
@@ -121,10 +122,13 @@ def ping(host, timeout=1):
         time.sleep(1)  # one second
 
     packet_min = min(varValues)
-    packet_max = max(varValues)
+    vars.append(packet_min)
     packet_avg = sum(varValues)/len(varValues)
+    vars.append(packet_avg)
+    packet_max = max(varValues)
+    vars.append(packet_max)
     stdev_var = statistics.stdev(varValues)
-
+    vars.append(stdev_var)
     vars = [str(round(packet_min, 2)), str(round(packet_avg, 2)), str(round(packet_max, 2)),
             str(stdev_var)]
     print("round-trip min/avg/max/stddev = ",round(packet_min, 2),"/",(round(packet_avg, 2),"/",(round(packet_max, 2),round(stdev_var,2)," ms")
