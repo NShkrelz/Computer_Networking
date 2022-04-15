@@ -127,13 +127,13 @@ def ping(host, timeout=1):
     print("min = ", round(packet_min,2))
     packet_avg = sum(varValues)/len(varValues)
     vars.append(packet_avg)
-    print("avg = ", round(packet_avg, 2))
+    print("avg = ", float(round(packet_avg, 2)))
     packet_max = max(varValues)
     vars.append(packet_max)
     print("max = ", round(packet_max,2))
     stdev_var = statistics.stdev(varValues)
     vars.append(stdev_var)
-    print("stddev = ", round(stdev_var,2))
+    print("stddev = ", float(stdev_var,2))
     #vars = [str(round(packet_min, 8)), str(round(packet_avg, 8)), str(round(packet_max, 8)),str(round(stdev(stdev_var), 8))]
     print("round-trip min/avg/max/stddev = ", vars[0], "/", vars[1], "/", vars[2], "/", vars[3], " ms")
     return vars
