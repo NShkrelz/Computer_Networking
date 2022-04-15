@@ -108,30 +108,34 @@ def ping(host, timeout=1):
     dest = gethostbyname(host)
     print("Pinging " + dest + " using Python:")
     print("")
-    # Calculate vars values and return them
     varValues = []
     vars = []
     # Send ping requests to a server separated by approximately one second
-    for i in range(0, 4):
-        delay = doOnePing(dest, timeout)
-        varValues.append(delay)
-        print(delay)
-        time.sleep(1)  # one second
 
+    for i in range(0, 4):  # Four pings will be sent (loop runs for i=0, 1, 2, 3)
+        delay = doOnePing(dest, timeout)
+        print(delay)
+        varValues.append(delay)
+        time.sleep(1)  # one second
+    # packet_min
+    # packet_avg
+    # packet_max
+    # stdev_var
+    # print(delayRTT)
     packet_min = min(varValues)
-    vars.append(packet_min)
     print("min = ", round(packet_min, 2))
+    vars.append(packet_min)
     packet_avg = sum(varValues) / len(varValues)
-    vars.append(packet_avg)
     print("avg = ", float(round(packet_avg, 2)))
+    vars.append(packet_avg)
     packet_max = max(varValues)
-    vars.append(packet_max)
     print("max = ", round(packet_max, 2))
+    vars.append(packet_max)
     stdev_var = statistics.stdev(varValues)
-    vars.append(stdev_var)
     print("stddev = ", float(stdev_var))
-    # vars = [str(round(packet_min, 8)), str(round(packet_avg, 8)), str(round(packet_max, 8)),str(round(stdev(stdev_var), 8))]
-    print("round-trip min/avg/max/stddev = ", vars[0], "/", vars[1], "/", vars[2], "/", vars[3], " ms")
+    vars.append(stdev_var)
+    # vars = [str(round(packet_min, 8)), str(round(packet_avg, 8)), str(round(packet_max, 8)),str(round(stdev_var), 8)]
+    print("round-trip min/avg/max/stddev = ", vars[0], "/", vars[1], "/", vars[2], "/", vars[3])
     return vars
 
 
