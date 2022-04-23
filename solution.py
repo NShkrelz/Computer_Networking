@@ -83,7 +83,7 @@ def get_route(hostname):
             try:
                 d = build_packet()
                 mySocket.sendto(d, (hostname, 0))
-                t= time.time()
+                t = time.time()
                 startedSelect = time.time()
                 whatReady = select.select([mySocket], [], [], timeLeft)
                 howLongInSelect = (time.time() - startedSelect)
@@ -91,7 +91,7 @@ def get_route(hostname):
                     tracelist1.append("* * * Request timed out.")
                     #Fill in start
                     #You should add the list above to your all traces list
-                    tracelist2.append([str(ttl), tracelist1[-1]])
+                    tracelist2.append(tracelist1)
                     #Fill in end
                 recvPacket, addr = mySocket.recvfrom(1024)
                 timeReceived = time.time()
@@ -100,7 +100,7 @@ def get_route(hostname):
                     tracelist1.append("* * * Request timed out.")
                     #Fill in start
                     #You should add the list above to your all traces list
-                    tracelist2.append([str(ttl), tracelist1[-1]])
+                    tracelist2.append(tracelist1)
                     #Fill in end
             except timeout:
                 continue
@@ -113,7 +113,7 @@ def get_route(hostname):
                 #Fill in end
                 try: #try to fetch the hostname
                     #Fill in start
-                    hostName = gethostbyname(addr[0])
+                    hostName = gethostbyname(addr[0])[0]
                     #Fill in end
                 except herror:   #if the host does not provide a hostname
                     #Fill in start
@@ -126,9 +126,9 @@ def get_route(hostname):
                     #Fill in start
                     rtt = (timeReceived - startedSelect) * 1000
                     tracelist1.append(str(ttl))
-                    tracelist1.append(str(round(rtt))+"ms")
+                    tracelist1.append(str(round(rtt)) + "ms")
                     tracelist1.append(str(addr[0]))
-                    tracelist1.append(str(hostName[0]))
+                    tracelist1.append(str(hostName))
                     #You should add your responses to your lists here
                     tracelist2.append(tracelist1)
                     #Fill in end
@@ -139,7 +139,8 @@ def get_route(hostname):
                     rtt = "*"
                     tracelist1.append(str(ttl))
                     tracelist1.append(str(rtt))
-                    tracelist1.append("Request timed out")
+                    tracelist1.append(str(addr[0]))
+                    tracelist1.append(hostName)
                     #You should add your responses to your lists here
                     tracelist2.append(tracelist1)
                     #Fill in end
@@ -163,10 +164,10 @@ def get_route(hostname):
                     tracelist2.append(tracelist1)
                     #Fill in end
                 break
-                print(tracelist2)
             finally:
                 mySocket.close()
-        return tracelist2
+        print(tracelist2)
+    return tracelist2
 
 
 if __name__ == '__main__':
