@@ -113,11 +113,11 @@ def get_route(hostname):
                 #Fill in end
                 try: #try to fetch the hostname
                     #Fill in start
-                    hostName = gethostbyname(addr)
+                    #hostName = gethostbyname(addr)
                     #Fill in end
                 except herror:   #if the host does not provide a hostname
                     #Fill in start
-                    hostName = "hostname not returnable"
+                    #hostName = "hostname not returnable"
                     #Fill in end
 
                 if types == 11:
